@@ -41,10 +41,10 @@ header nav ul:last-child li:first-child a {
 header .menubar nav a, .right-col .logged-in .links a,
 header .menubar nav li:after, .right-col .logged-in .links li:after {
 	text-shadow:
-		0px 1px 2px rgba(0,0,0,0.4),
-		0px -1px 2px rgba(0,0,0,0.4), 
-		1px 0px 2px rgba(0,0,0,0.4), 
-		-1px 0px 2px rgba(0,0,0,0.4);
+		0 1px 2px rgba(0,0,0,0.4),
+		0 -1px 2px rgba(0,0,0,0.4),
+		1px 0 2px rgba(0,0,0,0.4),
+		-1px 0 2px rgba(0,0,0,0.4);
 <?php
 	}
 	else { ?>
@@ -58,7 +58,7 @@ footer {
 .left-col.grid-70 .title > h1 {
 	font-family: Celestia !important;
 	font-size: 2em !important;
-	margin: 10px 0px 5px !important;
+	margin: 10px 0 5px !important;
 }
 div[id^="powerTip"] .name {
 	font-family: Celestia;

@@ -1,0 +1,11 @@
+.listing li {
+	.left {
+		background-color: #fff;
+
+		img {
+			background-size: contain;
+			background-repeat: no-repeat;
+		}
+	}
+	.right h1 a { color: inherit !important }
+}

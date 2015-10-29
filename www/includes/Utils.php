@@ -33,3 +33,8 @@
 	$POSSIBLE_PREFS = array('name','bottom','timeformat','sort','pinNotify');
 	$POSSIBLE_TIMES_FORMATS = array('12','24','at');
 	$POSSIBLE_SORT_ORDERS = array('abc','colour','new');
+
+	// Remove CSRF query parameter from request URL
+	function remove_csrf_query_parameter($url, $viajsToo = false){
+		return rtrim(preg_replace('/CSRF_TOKEN=[^&]+(&|$)/','',$url),'?&');
+	}
