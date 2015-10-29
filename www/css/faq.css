@@ -1,0 +1,23 @@
+.red {
+	color: red;
+}
+table {
+	border-collapse: collapse;
+	width:95%;
+	margin: 1em auto;
+}
+thead {
+	font-size:22px;
+}
+.listing > li .que:before {
+	content: '#' attr(id) ' ';
+}
+.listing > li .que {
+	font-family: Celestia;
+}
+.listing > li .ans p {
+	margin: 0px;
+}
+.listing > li .ans p:not(:last-child) {
+	margin-bottom: 10px !important;
+}

@@ -1,0 +1,34 @@
+.left-col {
+	border:1px solid #CECECE;
+	border-radius: 18px;
+	border-radius: 18px;
+	background-color:#F0F0F0;
+	box-sizing: border-box;
+	padding: 10px;
+	text-align: center;
+}
+.left-col .errorurl {
+	padding: 2px 5px;
+	margin: 1px 2px;
+	border: 1px solid #000;
+	display: inline-block;
+}
+.left-col.grid-70 > h1 {
+	margin: 0px 0px 5px;
+	font-size: 1.6em;
+	font-family:Celestia !important;
+}
+.left-col p {
+	padding: 0px;
+	margin: 0px 0px 5px;
+	font-size: .8em;
+}
+.left-col p:last-child a {
+	font-variant: small-caps;
+}
+.left-col img {
+	max-width: 160px;
+	width: 100%;
+	display: block;
+	margin: 10px auto;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "MLPNow",
+  "version": "2.4.0",
+  "description": "",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.4",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.4.2",
+    "gulp-util": "^3.0.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "DJDavid98/MLPNow"
+  },
+  "bugs": {
+    "url": "https://github.com/DJDavid98/MLPNow/issues",
+    "email": "djdavid98@gmail.com"
+  },
+  "author": "DJDavid98 <djdavid98@gmail.com> (http://djdavid98.hu/)",
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,9 @@
+#powerTip-timeformat {
+	border: none !important;
+	background-image: linear-gradient(to bottom, #676767 0%, #000 30%);
+	color: #fff;
+	max-width: 300px;
+}
+#powerTip-timeformat:before {
+	border: none !important;
+}
