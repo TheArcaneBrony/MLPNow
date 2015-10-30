@@ -1,11 +1,8 @@
 (function(){
 
-window.preview = typeof preview !== 'undefined' && preview === true;
-$.rnd = function(low,high){return Math.floor(Math.random()*(high-low+1))+low}
+
 
 var wlhref = window.location.href,total,/*timer,*/fancybox_href;
-
-$.ajax({type: "GET", url:window.location.pathname+'változások?latest'}).done(function(data){ $('#version').html( data.version )});
 
 window.MLPNow.fancybox = {
 	show: function(){
@@ -17,33 +14,6 @@ window.MLPNow.fancybox = {
 		MLPNow.timer.interval = setInterval(MLPNow.timer.func,500);
 	},
 };
-
-window.fancyboxDefault = {
-	maxWidth	: 1920,
-	maxHeight	: 1080,
-	fitToView	: false,
-	width		: '100%',
-	height		: '100%',
-	autoSize	: false,
-	closeClick	: false,
-	openEffect	: 'fade',
-	closeEffect	: 'none',
-	closeBtn	: false,
-	helpers : {
-		overlay : {
-			css : {
-				'background' : 'rgba(255, 255, 255, 0.6)'
-			}
-		},
-		title : null,
-	},
-	href		: '',
-	padding 	: 0,
-	type 		: "iframe",
-	beforeLoad	: function(){ setTimeout(MLPNow.fancybox.show,10) },
-	beforeClose	: function(){ MLPNow.fancybox.hide() },
-}
-window.faqfancybox = $.extend(true,{},fancyboxDefault,{href:(RELPATH+'f.a.q/#'+MLPNow.GET.faq)});
 
 function doDefault(){
 	$('#pony').attr('src',RELPATH+'pony/default');

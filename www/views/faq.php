@@ -3,7 +3,6 @@
 <html lang="hu">
 <head>
 	<title id="title">Gyakran Ismételt Kérdések - MLP Now</title>
-	<link rel="shortcut icon" href="<?=djpth('img>favicons>faq.ico')?>">
 
 <?php
 	$customCSS = array('css>faq.css','<css>listing.global.css');

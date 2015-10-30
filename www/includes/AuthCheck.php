@@ -15,17 +15,14 @@
 		$authKey = Cookie::get('access');
 
 		if (!empty($authKey))
-			/* authenticate user */;
+			$currentUser = get_user(sha1($authKey),'token');
 
 		if (!empty($currentUser)){
 			if ($currentUser['role'] !== 'ban'){
-				if (strtotime($currentUser['Session']['expires']) < NOW)
-					/* update user's access token */;
-
 				$signedIn = true;
-				$lastVisitTS = date('c', NOW);
-				if ($Database->where('id', $currentUser['Session']['id'])->update('sessions', array('lastvisit' => $lastVisitTS)))
-					$currentUser['Session']['lastvisit'] = $lastVisitTS;
+
+				if ($Database->where('id', $currentUser['Session']['id'])->update('sessions', array('lastvisit' => NOW_ISO)))
+					$currentUser['Session']['lastvisit'] = NOW_ISO;
 			}
 			else $Database->where('id', $currentUser['id'])->delete('sessions');
 		}

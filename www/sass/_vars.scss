@@ -1,0 +1,48 @@
+// Mobile-Desktop breakpoint
+$Breakpoint: 650px;
+
+// Content
+$ContentOutline: rgba(170,170,170,.8);
+$ContentBG: rgba(255,255,255,.6);
+
+// Links
+$Link: #337287;
+$LinkHover: desaturate(lighten($Link, 13), 7);
+
+$NoFontChange: true;
+@mixin link($color:$Link, $hover:$LinkHover){
+	color: $color;
+	text-decoration: none !important;
+	transition: color .2s linear;
+	font-weight: bold;
+
+	&:hover { color: $hover }
+}
+
+// Notices & buttons
+$NBlue: #07f;
+$NBlueBG: #def;
+$NDarkBlue: #03d;
+$NDarkBlueBG: #ddf;
+$NGreen: #090;
+$NGreenBG: #dfd;
+$NRed: #d00;
+$NRedBG: #fdd;
+$NOrange: #d50;
+$NOrangeBG: #fed;
+$NYellow: #b80;
+$NYellowBG: #ffd;
+
+@mixin sprite-animation($frameWidth, $height, $frames, $filename){
+	$imageWidth: $frames * $frameWidth;
+	width: $frameWidth;
+	height: $height;
+	background-size: $imageWidth $height;
+	background: url('../img/#{$filename}.png') no-repeat 0 0;
+
+	animation: anim-#{$filename} .6s steps($frames) infinite;
+	@keyframes anim-#{$filename} {
+		0% { background-position: 0 0 }
+		100% {background-position: 0 -$imageWidth }
+	}
+}

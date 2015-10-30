@@ -8,16 +8,6 @@ header nav ul:last-child li:first-child a {
 	font-family: Celestia, cursive;
 	font-weight: normal;
 <?php
-	include "../dbconf.php";
-	include "Database.php";
-	$Database = new Database();
-	$hpAccDB = new Database('hunpony');
-	include "Cookie.php";
-	$Cookie = new Cookie();
-	include "../../includes/Login.ex.php";
-	include "../includes/Pony.php";
-	$Pony = new Pony();
-	
 	$yay = false;
 	$pref = array();
 	

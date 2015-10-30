@@ -3,7 +3,6 @@
 <html lang="hu">
 <head>
 	<title id="title">Változási napló - MLP Now</title>
-	<link rel="shortcut icon" href="<?=djpth('img>favicons>chlg.ico')?>">
 
 <?php
 	$customCSS = array('css>changelog.css');

@@ -5,6 +5,10 @@
 	define('DB_USER','');
 	define('DB_PASS','');
 
+	// dA API Codes \\
+	define('OAUTH_DA_CLIENT','');
+	define('OAUTH_DA_SECRET','');
+
 	// Google Analytics Tracking Code \\
 	define('GA_TRACKING_CODE','');
 
@@ -20,3 +24,7 @@
 	$git = 'git';
 	define('LATEST_COMMIT_ID',rtrim(shell_exec("$git rev-parse --short=4 HEAD")));
 	define('LATEST_COMMIT_TIME',date('c',strtotime(shell_exec("$git log -1 --date=short --pretty=format:%ci"))));
+
+	// GitHub webhooks-related \\
+	define('GH_WEBHOOK_DO', '');
+	define('GH_WEBHOOK_SECRET', '');

@@ -11,10 +11,11 @@
 
 	// Time control
 	define('NOW', time());
+	define('NOW_ISO', date('c', NOW));
 
 	// Imports \\
-	require 'includes/PostgresDbWrapper.php';
-	$Database = new PostgresDbWrapper('mlpvc-rr');
+	require 'includes/PostgresDb.php';
+	$Database = new PostgresDb('mlpnow');
 	require 'includes/Cookie.php';
 	require 'includes/Utils.php';
 	require 'includes/AuthCheck.php';
