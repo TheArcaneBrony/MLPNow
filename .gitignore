@@ -1,6 +1,6 @@
 .idea
 www/conf.php
-mlpvc-rr-error.log
+mlpnow-error.log
 *.opdownload
 node_modules
 www/img/cg/
@@ -16,4 +16,4 @@ cf-ips.txt
 *.bat
 setup/*.sql
 !setup/*.pg.sql
-www/includes/MysqliDb.php
+setup/*_full.pg.sql
