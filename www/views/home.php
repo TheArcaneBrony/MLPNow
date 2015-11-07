@@ -48,8 +48,14 @@
 		/* if ($signedIn){ ?>
 			<p><a class="dyn" id="timeformat">Time format</a></p>
 			<p class="collapse"><a id="vectors" class="dyn">Vector Credits</a></p>
-<?php   } */ ?>
-			<p><?=$signedIn?'<a id="charsel" class="dyn">Character select</a>':'<a id="login" class="dyn">Log in</a>'?></p>
+<?php   } */
+	if ($signedIn){ ?>
+			<p>Signed in as <span class="dyn"><?=$currentUser['name']?></span></p>
+			<p><a id="charsel" class="dyn">Character select</a> - <a id="signout" class="dyn">Sign Out</a></p>
+<?  }
+	else { ?>
+			<p><a id="login" class="dyn">Log in</a></p>
+<?  } ?>
 			<p><a id="version" class="dyn">MLP Now <?=array_keys($updates)[0].'.0.'.LATEST_COMMIT_ID?></a> by <a class="dyn" href="http://djdavid98.hu/">DJDavid98</a></a></p>
 		</div>
 	</div>

@@ -24,12 +24,13 @@ $(function(){
 						.append(
 							$.mk('p').text('Choose a service to sign in with'),
 							$.mk('div').append(
-								$.mk('button').attr('class','deviantart').text('DeviantArt')
+								$.mk('input').attr({'class':'btn deviantart',type:'button'}).val('DeviantArt')
 							)
 						);
 				$.Dialog.info('Sign-in process', $ProviderDiv, function(){
-					$('#provider-selector').on('click', 'button[class]', function(){
-						window.location.href = '/oauth/start/'+this.className;
+					$('#provider-selector').on('click', 'input[class]', function(){
+						$.Dialog.wait(false, 'Redirecing you to '+this.innerHTML);
+						window.location.href = '/oauth/start/'+this.className.replace(/^btn\s/,'');
 					});
 				});
 			};
@@ -73,7 +74,8 @@ $(function(){
 			$.post('/signout',$.mkAjaxHandler(function(){
 				if (!this.status) return $.Dialog.fail(false, this.message);
 
-				$.Dialog.success(false, this.message);
+				$.Dialog.success(false, 'You have been signed out successfully');
+				$.Dialog.wait(false, 'Reloading');
 				setTimeout(function(){
 					window.location.reload();
 				},1000);

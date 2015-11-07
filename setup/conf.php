@@ -6,8 +6,11 @@
 	define('DB_PASS','');
 
 	// dA API Codes \\
-	define('OAUTH_DA_CLIENT','');
-	define('OAUTH_DA_SECRET','');
+	define('OAUTH_DEVIANTART_CLIENT','');
+	define('OAUTH_DEVIANTART_SECRET','');
+	// Google API Codes \\
+	define('OAUTH_GOOGLE_CLIENT','');
+	define('OAUTH_GOOGLE_SECRET','');
 
 	// Google Analytics Tracking Code \\
 	define('GA_TRACKING_CODE','');

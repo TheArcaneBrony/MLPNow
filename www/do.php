@@ -166,35 +166,49 @@
 			imagedestroy($img);
 			exit;
 		break;
+		case "signout":
+			if (!$signedIn)
+				respond(true);
+			detectCSRF();
+
+			if(!$Database->rawQuery(
+				"DELETE FROM sessions
+				WHERE id = ? OR lastvisit < NOW() - INTERVAL '30 DAY'",
+				array($currentUser['Session']['id']))
+			) respond(ERR_DB_FAIL);
+
+			respond(true);
+		break;
 		case "oauth":
 			$_match = array();
 			$data = strtolower($data);
-			if (!preg_match('~^(start|finish)/(\w{1,15})$~', $data, $_match))
+			if (!preg_match('~^(start|finish)/([a-z]{1,15})$~', $data, $_match))
 				do404();
 
 			$start = $_match[1] === 'start';
 			$provider = $_match[2];
+			$PROVIDER = strtoupper($provider);
 
 			$oAuthTable = "oauth__$provider";
 			if (!$Database->tableExists($oAuthTable))
 				do404();
 
-			switch ($provider){
-				default: do404();
-				case "deviantart":
-					require "includes/DeviantArt_oAuth.php";
-					$DAoAuth = new DeviantArt_oAuth(OAUTH_DA_CLIENT, OAUTH_DA_SECRET, "/$do/finish/$provider");
-					if ($start)
-						$DAoAuth->getCode();
-					else {
-						if (empty($_GET['code']))
-							do404();
-						$code = $_GET['code'];
+			$oAuthRedirectURI = "/$do/finish/$provider";
+			$Client = constant("OAUTH_{$PROVIDER}_CLIENT");
+			$Secret = constant("OAUTH_{$PROVIDER}_SECRET");
+			$ClassName = "{$provider}_oAuth";
+			require_once "includes/$ClassName.php";
+			$oAuth = new $ClassName($Client, $Secret, $oAuthRedirectURI);
 
-						$Auth = $DAoAuth->getTokens($code, 'authorization_code');
-						$User = $DAoAuth->getUserInfo($Auth['access_token']);
-					}
-				break;
+			if ($start)
+				$oAuth->getCode();
+			else {
+				if (empty($_GET['code']))
+					do404();
+				$code = $_GET['code'];
+
+				$Auth = $oAuth->getTokens($code, 'authorization_code');
+				$User = $oAuth->getUserInfo($Auth['access_token']);
 			}
 
 			$LocalCopy = $Database->where('remote_id', $User['remote_id'])->getOne($oAuthTable);

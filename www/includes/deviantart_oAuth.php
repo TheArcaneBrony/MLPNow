@@ -2,7 +2,7 @@
 
 	require_once "oAuthProvider.php";
 
-	class DeviantArt_oAuth extends oAuthProvider {
+	class deviantart_oAuth extends oAuthProvider {
 		protected
 			$_user_authorize_uri = 'https://www.deviantart.com/oauth2/authorize',
 			$_token_request_uri = 'https://www.deviantart.com/oauth2/token',

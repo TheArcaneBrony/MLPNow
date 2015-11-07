@@ -41,4 +41,5 @@ button, .btn {
 	}
 	&:hover, &:focus { opacity: 1 }
 	&:active { transform: scale(.96) }
+	&:disabled { opacity: .5 }
 }
