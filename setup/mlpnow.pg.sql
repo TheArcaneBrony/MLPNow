@@ -58,15 +58,18 @@ CREATE TABLE oauth__deviantart (
 ALTER TABLE oauth__deviantart OWNER TO mlpnow;
 
 --
--- Name: oauth__providers; Type: TABLE; Schema: public; Owner: mlpnow; Tablespace: 
+-- Name: oauth__google; Type: TABLE; Schema: public; Owner: mlpnow; Tablespace: 
 --
 
-CREATE TABLE oauth__providers (
-    provider_name character varying(15) NOT NULL
+CREATE TABLE oauth__google (
+    remote_id character varying(50) NOT NULL,
+    remote_name character varying(255) NOT NULL,
+    remote_avatar character varying(255) NOT NULL,
+    local_id uuid NOT NULL
 );
 
 
-ALTER TABLE oauth__providers OWNER TO mlpnow;
+ALTER TABLE oauth__google OWNER TO mlpnow;
 
 --
 -- Name: ponies; Type: TABLE; Schema: public; Owner: mlpnow; Tablespace: 
@@ -105,7 +108,7 @@ ALTER TABLE roles OWNER TO mlpnow;
 
 CREATE TABLE sessions (
     id integer NOT NULL,
-    "user" character varying NOT NULL,
+    "user" uuid NOT NULL,
     created timestamp without time zone DEFAULT now() NOT NULL,
     lastvisit timestamp without time zone DEFAULT now() NOT NULL,
     token character varying(40) NOT NULL,
@@ -145,9 +148,9 @@ ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
 
 CREATE TABLE users (
     local_id uuid DEFAULT uuid_generate_v4() NOT NULL,
-    username_provider character varying(15) NOT NULL,
-    avatar_provider character varying(15) NOT NULL,
-    role character varying(10) DEFAULT 'user'::character varying NOT NULL
+    role character varying(10) DEFAULT 'user'::character varying NOT NULL,
+    name character varying(255) NOT NULL,
+    avatar_url character varying(255) NOT NULL
 );
 
 
@@ -161,19 +164,19 @@ ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq':
 
 
 --
+-- Name: oauth__deviantart_local_id; Type: CONSTRAINT; Schema: public; Owner: mlpnow; Tablespace: 
+--
+
+ALTER TABLE ONLY oauth__deviantart
+    ADD CONSTRAINT oauth__deviantart_local_id UNIQUE (local_id);
+
+
+--
 -- Name: oauth__deviantart_vendor_id; Type: CONSTRAINT; Schema: public; Owner: mlpnow; Tablespace: 
 --
 
 ALTER TABLE ONLY oauth__deviantart
     ADD CONSTRAINT oauth__deviantart_vendor_id PRIMARY KEY (remote_id);
-
-
---
--- Name: oauth__providers_provider_name; Type: CONSTRAINT; Schema: public; Owner: mlpnow; Tablespace: 
---
-
-ALTER TABLE ONLY oauth__providers
-    ADD CONSTRAINT oauth__providers_provider_name PRIMARY KEY (provider_name);
 
 
 --
@@ -201,6 +204,14 @@ ALTER TABLE ONLY roles
 
 
 --
+-- Name: sessions_id; Type: CONSTRAINT; Schema: public; Owner: mlpnow; Tablespace: 
+--
+
+ALTER TABLE ONLY sessions
+    ADD CONSTRAINT sessions_id PRIMARY KEY (id);
+
+
+--
 -- Name: users_local_id; Type: CONSTRAINT; Schema: public; Owner: mlpnow; Tablespace: 
 --
 
@@ -209,17 +220,26 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: users_avatar_provider; Type: INDEX; Schema: public; Owner: mlpnow; Tablespace: 
+-- Name: sessions_user; Type: INDEX; Schema: public; Owner: mlpnow; Tablespace: 
 --
 
-CREATE INDEX users_avatar_provider ON users USING btree (avatar_provider);
+CREATE INDEX sessions_user ON sessions USING btree ("user");
 
 
 --
--- Name: users_username_provider; Type: INDEX; Schema: public; Owner: mlpnow; Tablespace: 
+-- Name: oauth__deviantart_local_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mlpnow
 --
 
-CREATE INDEX users_username_provider ON users USING btree (username_provider);
+ALTER TABLE ONLY oauth__deviantart
+    ADD CONSTRAINT oauth__deviantart_local_id_fkey FOREIGN KEY (local_id) REFERENCES users(local_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: sessions_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mlpnow
+--
+
+ALTER TABLE ONLY sessions
+    ADD CONSTRAINT sessions_user_fkey FOREIGN KEY ("user") REFERENCES users(local_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -228,14 +248,6 @@ CREATE INDEX users_username_provider ON users USING btree (username_provider);
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_role_fkey FOREIGN KEY (role) REFERENCES roles(name) ON UPDATE CASCADE ON DELETE SET DEFAULT;
-
-
---
--- Name: users_username_provider_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mlpnow
---
-
-ALTER TABLE ONLY users
-    ADD CONSTRAINT users_username_provider_fkey FOREIGN KEY (username_provider) REFERENCES oauth__providers(provider_name) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -254,15 +266,6 @@ GRANT ALL ON SCHEMA public TO mlpnow;
 REVOKE ALL ON TABLE oauth__deviantart FROM PUBLIC;
 REVOKE ALL ON TABLE oauth__deviantart FROM mlpnow;
 GRANT ALL ON TABLE oauth__deviantart TO mlpnow;
-
-
---
--- Name: oauth__providers; Type: ACL; Schema: public; Owner: mlpnow
---
-
-REVOKE ALL ON TABLE oauth__providers FROM PUBLIC;
-REVOKE ALL ON TABLE oauth__providers FROM mlpnow;
-GRANT ALL ON TABLE oauth__providers TO mlpnow;
 
 
 --
