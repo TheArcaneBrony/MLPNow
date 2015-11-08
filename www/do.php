@@ -179,6 +179,64 @@
 
 			respond(true);
 		break;
+		case "link":
+			if (!$signedIn)
+				respond();
+
+			$_match = array();
+			$data = strtolower($data);
+			if (!preg_match('~^(start|finish)(/migrate)?/([a-z]{1,15})$~', $data, $_match))
+				do404();
+
+			$start = $_match[1] === 'start';
+			$migrate = !empty($_match[2]);
+			$provider = $_match[3];
+			$PROVIDER = strtoupper($provider);
+
+			$oAuthTable = "oauth__$provider";
+			if (!$Database->tableExists($oAuthTable))
+				do404();
+
+			$oAuthRedirectURI = "/$do/finish".($migrate?'/migrate':'')."/$provider";
+			$Client = constant("OAUTH_{$PROVIDER}_CLIENT");
+			$Secret = constant("OAUTH_{$PROVIDER}_SECRET");
+			$ClassName = "{$provider}_oAuth";
+			require_once "includes/$ClassName.php";
+			$oAuth = new $ClassName($Client, $Secret, $oAuthRedirectURI);
+
+			if ($start)
+				$oAuth->getCode();
+			else {
+				if (empty($_GET['code']))
+					do404();
+				$code = $_GET['code'];
+
+				$Auth = $oAuth->getTokens($code, 'authorization_code');
+				$User = $oAuth->getUserInfo($Auth['access_token']);
+			}
+
+			if (empty($User['remote_id']))
+				do404();
+
+			$LocalCopy = $Database->where('remote_id', $User['remote_id'])->getOne($oAuthTable);
+			if (empty($LocalCopy)){
+				$User['local_id'] = $currentUser['local_id'];
+				$Database->insert($oAuthTable, $User);
+			}
+			else if ($LocalCopy['local_id'] !== $currentUser['local_id']){
+				$localid_array = array('local_id' => $currentUser['local_id']);
+				$Database->where('remote_id', $LocalCopy['remote_id'])->update($oAuthTable, $localid_array);
+
+				$LocalUser = $Database->where('local_id', $LocalCopy['local_id'])->getOne('users');
+				if (!empty($LocalUser)){
+					if (!$migrate)
+						$Database->where('local_id', $LocalCopy['local_id'])->delete('users');
+					//else $Database->where('local_id', $LocalCopy['local_id'])->update('prefs', $localid_array);
+				}
+			}
+
+			redirect('/', AND_DIE);
+		break;
 		case "oauth":
 			$_match = array();
 			$data = strtolower($data);
@@ -210,6 +268,9 @@
 				$Auth = $oAuth->getTokens($code, 'authorization_code');
 				$User = $oAuth->getUserInfo($Auth['access_token']);
 			}
+
+			if (empty($User['remote_id']))
+				do404();
 
 			$LocalCopy = $Database->where('remote_id', $User['remote_id'])->getOne($oAuthTable);
 			if (empty($LocalCopy)){

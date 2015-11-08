@@ -51,7 +51,7 @@
 <?php   } */
 	if ($signedIn){ ?>
 			<p>Signed in as <span class="dyn"><?=$currentUser['name']?></span></p>
-			<p><a id="charsel" class="dyn">Character select</a> - <a id="signout" class="dyn">Sign Out</a></p>
+			<p><a id="charsel" class="dyn">Character select</a> - <a id="signout" class="dyn">Sign Out</a> - <a id="link" class="dyn">Link</a></p>
 <?  }
 	else { ?>
 			<p><a id="login" class="dyn">Log in</a></p>

@@ -8,6 +8,8 @@
 	src: local('Celestia Redux Alternate'), local('Celestia Medium Redux'), url('../font/Celestia Medium Redux.ttf') format('truetype');
 }
 
+:focus { outline: 0 }
+
 // Colors
 .color-blue { color: $NBlue }
 .color-darkblue { color: $NDarkBlue }

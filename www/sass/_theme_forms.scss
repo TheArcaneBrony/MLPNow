@@ -65,17 +65,27 @@ input[type=checkbox] {
 	vertical-align: bottom;
 	top: -2px;
 
-	&:disabled { cursor: default }
+	&:disabled {
+		cursor: default;
+
+		&:before {
+			content: "×";
+			color: #f00;
+			opacity: 1;
+			font-weight: bold;
+		}
+	}
 	&:checked:before { opacity: 1 }
 	&:before {
 		position: absolute;
 		top: 2px;
-		left: 2px;
 		content: "\2713";
 		font-size: 14px;
 		line-height: 10px;
 		opacity: 0;
 		color: #000;
+		width: 100%;
+		text-align: center;
 	}
 }
 #dialogContent {

@@ -16,20 +16,20 @@ $(function(){
 					localStorage.setItem('cookie_consent', 1);
 				} catch(e){}
 
-				$this.attr('disabled', true);
 				var $ProviderDiv =
 					$.mk('div')
 						.attr('id','provider-selector')
 						.attr('class','align-center')
 						.append(
 							$.mk('p').text('Choose a service to sign in with'),
-							$.mk('div').append(
-								$.mk('input').attr({'class':'btn deviantart',type:'button'}).val('DeviantArt')
+							$.mk('div').attr('class','providers').append(
+								$.mk('input').attr({'class':'btn deviantart',type:'button'}).val('DeviantArt'),
+								$.mk('input').attr({'class':'btn google',type:'button'}).val('Google')
 							)
 						);
 				$.Dialog.info('Sign-in process', $ProviderDiv, function(){
 					$('#provider-selector').on('click', 'input[class]', function(){
-						$.Dialog.wait(false, 'Redirecing you to '+this.innerHTML);
+						$.Dialog.wait(false, 'Redirecing you to '+this.value);
 						window.location.href = '/oauth/start/'+this.className.replace(/^btn\s/,'');
 					});
 				});
@@ -37,6 +37,44 @@ $(function(){
 
 		if (!consent) $.Dialog.confirm('EU Cookie Policy Notice','In compliance with the <a href="http://ec.europa.eu/ipg/basics/legal/cookies/index_en.htm">EU Cookie Policy</a> we must inform you that our website will store cookies on your device to remember your logged in status between browser sessions.<br><br>If you would like to avoid these completly harmless pieces of information required to use this website, click "Decline" and continue browsing as a guest.<br><br>This warning will not appear again if you accept our use of persistent cookies.',['Accept','Decline'],opener);
 		else opener(true);
+	});
+	$('#link').on('click',function(){
+		var $LinkForm =
+			$.mk('form')
+				.attr('id','link-form')
+				.attr('class','align-center')
+				.append(
+					$.mk('p').text("Linking your different accounts will allow you to use the same settings across multiple external logins"),
+					$.mk('p').text("Choose an account which you'd like to link to your current login"),
+					$.mk('label').attr('class','providers').append(
+						$.mk('select').attr({
+							name:'provider',
+							required:true,
+						}).append(
+							$.mk('option').attr({value:'',selected:true}).text('(click here to select)').hide(),
+							$.mk('option').attr('value','deviantart').text('DeviantArt'),
+							$.mk('option').attr('value','google').text('Google')
+						)
+					),
+					$.mk('label').append(
+						$.mk('input').attr({
+							type:'checkbox',
+							name:'migrate',
+							disabled:true,
+						}),
+						$.mk('span').text("If target account exists, copy settings")
+					)
+				);
+		$.Dialog.request('Link acounts',$LinkForm,'link-form','Link account',function($form){
+			$form.on('submit',function(e){
+				e.preventDefault();
+
+				var data = $form.mkData();
+
+				$.Dialog.wait(false,'Redirecting you to '+$form.find('select').children(':selected').text());
+				window.location.href = '/link/start/'+(data.migrate?'migrate/':'')+data.provider;
+			});
+		});
 	});
 
 	// Start timer
@@ -142,8 +180,7 @@ $(function(){
 
 	var tempName;
 	function changeBGImage(whichImage,reload){
-		var random = false,
-			scope = this;
+		var random = false;
 
 		if (['boolean','undefined'].indexOf(typeof reload) === -1){
 			random = true;

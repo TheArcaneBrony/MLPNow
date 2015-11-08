@@ -18,7 +18,8 @@ class oAuthProvider {
 	protected
 		$_client_id,
 		$_client_secret,
-		$_redirect_uri;
+		$_redirect_uri,
+		$_force_POST = false;
 
 	// Must be set by child classes
 	protected
@@ -44,7 +45,9 @@ class oAuthProvider {
 
 		$requestHeaders = array(
 			"Accept-Encoding: gzip",
-			"User-Agent: ".SITE_TITLE." @ ".ABSPATH
+			"User-Agent: ".SITE_TITLE." @ ".ABSPATH,
+			'Content-Type: application/x-www-form-urlencoded',
+			'Content-Transfer-Encoding: binary',
 		);
 		if (!empty($token))
 			$requestHeaders[] = "Authorization: {$this->_token_type} $token";
@@ -54,17 +57,26 @@ class oAuthProvider {
 		$r = curl_init($requestURI);
 		$curl_opt = array(
 			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_HTTPHEADER => $requestHeaders,
 			CURLOPT_HEADER => 1,
 			CURLOPT_BINARYTRANSFER => 1,
 		);
-		if (!empty($postdata)){
+
+		if (isset($postdata)){
 			$query = array();
-			foreach($postdata as $k => $v)
-				$query[] = urlencode($k).'='.urlencode($v);
-			$curl_opt[CURLOPT_POST] = count($postdata);
-			$curl_opt[CURLOPT_POSTFIELDS] = implode('&', $query);
+			if (!empty($postdata)){
+				foreach ($postdata as $k => $v)
+					$query[] = urlencode($k).'='.urlencode($v);
+			}
+			$curl_opt[CURLOPT_POST] = true;
+			if (!empty($query)){
+				$curl_opt[CURLOPT_POSTFIELDS] = implode('&', $query);
+				$postlength = strlen($curl_opt[CURLOPT_POSTFIELDS]);
+			}
+			else $postlength = 0;
+
+			$requestHeaders[] = "Content-Length: $postlength";
 		}
+		$curl_opt[CURLOPT_HTTPHEADER] = $requestHeaders;
 		curl_setopt_array($r, $curl_opt);
 
 		$response = curl_exec($r);
@@ -77,10 +89,10 @@ class oAuthProvider {
 		$curlError = curl_error($r);
 		curl_close($r);
 
-		if ($responseCode < 200 || $responseCode >= 300)
-			throw new oAuthRequestException(rtrim("cURL fail for URL \"$requestURI\" (HTTP $responseCode); $curlError",' ;'), $responseCode);
-
 		if (preg_match('/Content-Encoding:\s?gzip/',$responseHeaders)) $response = gzdecode($response);
+		if ($responseCode < 200 || $responseCode >= 300)
+			throw new oAuthRequestException(rtrim("cURL fail for URL \"$requestURI\" (HTTP $responseCode); $curlError",' ;'), $responseCode, array('response' => $response, 'requestURI' => $requestURI, 'requestHeaders' => $requestHeaders));
+
 		return json_decode($response, true);
 	}
 
@@ -125,7 +137,13 @@ class oAuthProvider {
 
 		switch ($type){
 			case "authorization_code":
-				$json = $this->_sendRequest("$URL&code=$code&redirect_uri={$this->_redirect_uri}",false);
+				$requestURI = "$URL&code=$code&redirect_uri={$this->_redirect_uri}";
+				$getparams = array();
+				if ($this->_force_POST === true){
+					$query = parse_url($requestURI, PHP_URL_QUERY);
+					parse_str($query, $getparams);
+				}
+				$json = $this->_sendRequest($requestURI,false,$getparams);
 			break;
 			case "refresh_token":
 				$json = $this->_sendRequest("$URL&refresh_token=$code",false);
@@ -147,12 +165,18 @@ class oAuthProvider {
 	 *     'refresh_token' => (string) {refresh token},
 	 *     'expires' => (date string) {refresh token},
 	 * )
+	 *
+	 * @param array $token_array
+	 *
+	 * @return array
 	 */
 	protected function _formatTokenArray($token_array){
-		return array(
+		$r = array(
 			'access_token' => $token_array['access_token'],
-			'refresh_token' => $token_array['refresh_token'],
-			'expires' => date('c', NOW+intval($token_array['expires_in'], 10)),
+			'expires' => date('c', time()+intval($token_array['expires_in'], 10)),
 		);
+		if (!empty($token_array['refresh_token']))
+			$r['refresh_token'] = $token_array['refresh_token'];
+		return $r;
 	}
 }
