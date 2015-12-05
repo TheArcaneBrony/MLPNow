@@ -2,8 +2,9 @@
 
 	/**
 	 * PostgresDb Class
+	 * by @DJDavid98 | https://github.com/DJDavid98/PHP-PostgreSQL-Database-Class
 	 *
-	 * Heavily ased on MysqliDB version 2.4 as made by
+	 * Heavily based on MysqliDB version 2.4 as made by
 	 *   Jeffery Way <jeffrey@jeffrey-way.com>
 	 *   Josh Campbell <jcampbell@ajillion.com>
 	 *   Alexander V. Butenko <a.butenka@gmail.com>
@@ -18,56 +19,56 @@
 			 *
 			 * @var PDO
 			 */
-			$_conn,
+				$_conn,
 			/**
 			 * The SQL query to be prepared and executed
 			 *
 			 * @var string
 			 */
-			$_query,
+				$_query,
 			/**
 			 * The previously executed SQL query
 			 *
 			 * @var string
 			 */
-			$_lastQuery,
+				$_lastQuery,
 			/**
 			 * An array that holds where joins
 			 *
 			 * @var array
 			 */
-			$_join = array(),
+				$_join = array(),
 			/**
 			 * An array that holds where conditions 'fieldname' => 'value'
 			 *
 			 * @var array
 			 */
-			$_where = array(),
+				$_where = array(),
 			/**
 			 * Dynamic type list for order by condition value
 			 */
-			$_orderBy = array(),
+				$_orderBy = array(),
 			/**
 			 * Dynamic type list for group by condition value
 			 */
-			$_groupBy = array(),
+				$_groupBy = array(),
 			/**
 			 * Dynamic array that holds a combination of where condition/table data value types and parameter references
 			 *
 			 * @var array|null
 			 */
-			$_bindParams = null,
+				$_bindParams = null,
 			/**
 			 * Name of the auto increment column
 			 *
 			 */
-			$_lastInsertId = null,
+				$_lastInsertId = null,
 			/**
 			 * Variable which holds last statement error
 			 *
 			 * @var string
 			 */
-			$_stmtError = null;
+				$_stmtError = null;
 
 		public
 			/**
@@ -75,7 +76,7 @@
 			 *
 			 * @var string
 			 */
-			$count = 0;
+				$count = 0;
 
 		private
 			/**
@@ -83,7 +84,7 @@
 			 *
 			 * @var string
 			 */
-			$_connstr;
+				$_connstr;
 
 		public function __construct($db, $host = DB_HOST, $user = DB_USER, $pass = DB_PASS){
 			$this->_connstr = "pgsql:host=$host user=$user password=$pass dbname=$db options='--client_encoding=UTF8'";
@@ -95,8 +96,7 @@
 				$this->_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			}
 			catch (PDOException $e){
-				echo "Database connection error: ".$e->getMessage();
-				exit;
+				throw new Exception("Database connection error: ".$e->getMessage());
 			}
 		}
 
@@ -221,7 +221,7 @@
 				if (preg_match('~^[a-z_\-\d]+$~', $varName)){
 					$varName = "\"$varName\"";
 				}
-				$this->_query .= " $concat $varName";
+				$this->_query .= ' '.trim("$concat $varName");
 
 				switch (strtolower($operator)) {
 					case 'not in':
@@ -259,6 +259,7 @@
 						}
 				}
 			}
+			$this->_query = rtrim($this->_query);
 		}
 
 		public function _buildDataPairs($tableData, $tableColumns, $isInsert){
@@ -338,7 +339,7 @@
 				else $this->_query .= "$prop $value, ";
 			}
 
-			$this->_query = rtrim($this->_query, ', ').' ';
+			$this->_query = rtrim($this->_query, ', ');
 		}
 
 		/**
@@ -383,10 +384,10 @@
 			}
 
 			$this->_query .= ' LIMIT '.(
-				is_array($numRows)
-					? (int) $numRows[1].' OFFSET '.(int) $numRows[0]
-					: (int) $numRows
-				);
+					is_array($numRows)
+							? (int) $numRows[1].' OFFSET '.(int) $numRows[0]
+							: (int) $numRows
+					);
 		}
 
 		/**
@@ -477,7 +478,7 @@
 		 * @return int
 		 */
 		public function count($table){
-			return $this->getOne($table, 'COUNT(*) as c')['c'];
+			return $this->getOne($table, 'COUNT(*)::int as c')['c'];
 		}
 
 		/**
@@ -687,7 +688,7 @@
 			$joinType = strtoupper(trim($joinType));
 
 			if ($joinType && !in_array($joinType, $allowedTypes)){
-				die ('Wrong JOIN type: '.$joinType);
+				die("Wrong JOIN type: $joinType");
 			}
 
 			$this->_join[] = array($joinType, $joinTable, $joinCondition);
@@ -713,7 +714,7 @@
 
 			if ($success !== true){
 				$errInfo = $stmt->errorInfo();
-				$this->_stmtError = "PDO Error #".$errInfo[1].": ".$errInfo[2];
+				$this->_stmtError = "PDO Error #{$errInfo[1]}: {$errInfo[2]}";
 				$result = false;
 				$this->count = 0;
 			}
@@ -723,8 +724,8 @@
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			}
 			$this->_lastQuery = isset($this->_bindParams)
-				? $this->_replacePlaceHolders($this->_query, $this->_bindParams)
-				: $this->_query;
+					? $this->_replacePlaceHolders($this->_query, $this->_bindParams)
+					: $this->_query;
 			$this->_reset();
 
 			return $result;
