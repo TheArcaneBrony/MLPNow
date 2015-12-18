@@ -425,7 +425,7 @@
 	// Settings
 	$POSSIBLE_PREFS = array('pony','sort','timeformat','bottom');
 	$POSSIBLE_TIME_FORMATS = array('12','24','at');
-	$POSSIBLE_SORT_ORDERS = array('abc','colour','new');
+	$POSSIBLE_SORT_ORDERS = array('abc','colour','newabc');
 
 	// Remove CSRF query parameter from request URL
 	function remove_csrf_query_parameter($url, $viajsToo = false){

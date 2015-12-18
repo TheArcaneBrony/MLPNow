@@ -92,7 +92,7 @@ $(function(){
 	var $toggle = $('#toggle').on('click', Bottom),
 		$toggleText = $toggle.children('.text'),
 		$toggleIcon = $toggle.children('.typcn');
-	$('#slideoutTitle').find('.order-by').children().on('click',function(){ Sort($(this).attr('id'),true) });
+	$('#slideoutTitle').find('.order-by').children().on('click',function(){ Sort($(this).attr('id')) });
 	$('#version').on('click',function(){ });
 	// TODO
 	//$('#vectors').on('click',function(){ });
@@ -135,7 +135,7 @@ $(function(){
 	}
 	doDefault();
 
-	function Sort(mode){
+	function Sort(mode, noupdate){
 		mode = mode.toLowerCase();
 		if ($slideout.attr('class') === 'sort-'+mode)
 			return false;
@@ -174,9 +174,10 @@ $(function(){
 
 		$slideout.attr('class','sort-'+mode);
 
-		if (this.handler !== false)
+		if (!noupdate)
 			updatePref('sort',mode);
 	}
+	Sort(MLPNow.pref.sort, true);
 
 	var tempName;
 	function changeBGImage(ponyName,noupdate){
