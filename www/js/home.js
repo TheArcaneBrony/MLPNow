@@ -333,7 +333,7 @@ $(function(){
 			$('#slideoutTitle .heading').css('color','#777');
 			$tiles.removeClass('force-hover');
 			tempName = undefined;
-			updatePref('name','');
+			updatePref('pony',null);
 		}
 		else changeBGImage(shortname);
 	});

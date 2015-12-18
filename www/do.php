@@ -57,6 +57,10 @@
 					if (!in_array($value, $POSSIBLE_SORT_ORDERS))
 						respond("Invalid sort order setting: \"$value\"");
 				break;
+				case 'pony':
+					if (empty($value))
+						$value = null;
+				break;
 			}
 
 			$UserPrefs = get_prefs();
