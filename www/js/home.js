@@ -55,13 +55,28 @@ $(function(){
 							$.mk('option').attr('value','google').text('Google')
 						)
 					),
-					$.mk('label').append(
-						$.mk('input').attr({
-							type:'checkbox',
-							name:'migrate',
-							disabled:true,
-						}),
-						$.mk('span').text("If target account exists, copy settings")
+					$.mk('div').attr('class','what-to-keep').append(
+						$.mk('p').text('Use the settings of'),
+						$.mk('label').append(
+							$.mk('input').attr({
+								type:'radio',
+								name:'migrate',
+								value: '',
+								checked: true,
+								required:true,
+							}),
+							$.mk('span').text('this account')
+						),
+						"&nbsp;",
+						$.mk('label').append(
+							$.mk('input').attr({
+								type:'radio',
+								name:'migrate',
+								value: '1',
+								required:true,
+							}),
+							$.mk('span').text('target account (if exists)')
+						)
 					)
 				);
 		$.Dialog.request('Link acounts',$LinkForm,'link-form','Link account',function($form){

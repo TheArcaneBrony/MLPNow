@@ -234,9 +234,17 @@
 
 				$LocalUser = $Database->where('local_id', $LocalCopy['local_id'])->getOne('users');
 				if (!empty($LocalUser)){
-					if (!$migrate)
-						$Database->where('local_id', $LocalCopy['local_id'])->delete('users');
-					//else $Database->where('local_id', $LocalCopy['local_id'])->update('prefs', $localid_array);
+					if ($migrate){
+						$OldPrefs = $Database->where('user', $LocalCopy['local_id'])->getOne('prefs');
+						if (!empty($OldPrefs)){
+							if ($Database->where('user', $currentUser['local_id'])->has('prefs')){
+								unset($OldPrefs['user']);
+								$Database->where('user', $currentUser['local_id'])->update('prefs', $OldPrefs);
+							}
+							else $Database->where('user', $LocalCopy['local_id'])->update('prefs', array('user' => $currentUser['local_id']));
+						}
+					}
+					$Database->where('local_id', $LocalCopy['local_id'])->delete('users');
 				}
 			}
 
