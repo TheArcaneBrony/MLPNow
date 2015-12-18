@@ -82,4 +82,5 @@ INSERT INTO public.ponies ("shortname","longname","textcolor","bgcolor","color",
 ('ts','Twilight Sparkle','#273771','#E6458B','#873E7E','d472wc5','AncientKale',false),
 ('tw','Twinkle','#ED93DE','#FFC2F4','#F6ABE9','d4lziim','Scotch208',false),
 ('vs','Vinyl Scratch','#0071CF','#00CDF1','#009FE0','d4xvn1e','MoongazePonies',false),
-('wf','Wild Fire','#38271B','#696152','#514437','d5up53r','Vector-Brony',false);
+('wf','Wild Fire','#38271B','#696152','#514437','d5up53r','Vector-Brony',false),
+('pn','Paamayim Nekudotayim','#6181B6','#7AA7F0','#6181B6','d90l5vj','DJDavid98',true);
