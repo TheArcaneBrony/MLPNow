@@ -2,11 +2,11 @@
 <div id="slideoutWrapper" class="dyn">
 	<div id="slideout" class="sort-abc">
 		<div id="slideoutTitle">
-			<h1 class="dyn"><?=count($Ponies)?> db</h1>
+			<h1 class="dyn"><?=count($Ponies)?> ponies</h1>
 			<div class="order-by dyn"><!--
-			 --><span id="abc" title="Ábécé sorrendben" class="typcn typcn-sort-alphabetically"></span><!--
-			 --><span id="colour" title="Szín szerint" class="typcn typcn-brush"></span><!--
-			 --><span id="newabc" title="Újak előre" class="typcn typcn-star"></span>
+			 --><span id="abc" title="Alphabetical order" class="typcn typcn-sort-alphabetically"></span><!--
+			 --><span id="colour" title="Order by color" class="typcn typcn-brush"></span><!--
+			 --><span id="newabc" title="Recently added first" class="typcn typcn-star"></span>
 			</div>
 		</div>
 		<div id="slideoutInner">
