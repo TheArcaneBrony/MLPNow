@@ -379,15 +379,6 @@
 		return $c;
 	}
 
-	// Preseving alpha
-	function preserveAlpha($img) {
-		$background = imagecolorallocate($img, 0, 0, 0);
-		imagecolortransparent($img, $background);
-		imagealphablending($img, false);
-		imagesavealpha($img, true);
-		return $img;
-	}
-
 	# Make any absolute URL HTTPS
 	function makeHttps($url){
 		return preg_replace('~^(https?:)?//~','https://',$url);
@@ -453,4 +444,23 @@
 			unset($UserPrefs['user']);
 
 		return $UserPrefs;
+	}
+
+	// Preseving alpha
+	function preserveAlpha($img, &$background = null) {
+		$background = imagecolorallocatealpha($img, 0, 0, 0, 127);
+		imagecolortransparent($img, $background);
+		imagealphablending($img, false);
+		imagesavealpha($img, true);
+		return $img;
+	}
+
+	// Transparent Image creator
+	function imageCreateTransparent($width, $height = null) {
+		if (!isset($height))
+			$height = $width;
+
+		$png = preserveAlpha(imagecreatetruecolor($width, $height), $transparency);
+		imagefill($png, 0, 0, $transparency);
+		return $png;
 	}

@@ -103,7 +103,7 @@
 		case "splat":
 		case "loader":
 			$match = array();
-			preg_match('/^([a-f0-9]{3}|[a-f0-9]{6}|default)(?:\/([a-f0-9]{3}|[a-f0-9]{6}))?$/', $data, $_match);
+			preg_match('/^([a-f0-9]{3}|[a-f0-9]{6}|default)(?:\/([a-f0-9]{3}|[a-f0-9]{6}))?$/i', $data, $_match);
 			$isSimple = empty($_match[2]);
 			$isGradient = !$isSimple;
 
