@@ -12,6 +12,9 @@
 
 	$updates = array(
 		'3.0' => array(
+			'ponies' => array(
+				'Paamayim Nekudotayim'
+			),
 			'Nagy részben újrairt kódbázis',
 			'oAuth bejelentkezés',
 			'Beállítások mentése a szerveren',
