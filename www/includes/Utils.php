@@ -423,11 +423,34 @@
 	}
 	
 	// Settings
-	$POSSIBLE_PREFS = array('name','bottom','timeformat','sort','pinNotify');
-	$POSSIBLE_TIMES_FORMATS = array('12','24','at');
+	$POSSIBLE_PREFS = array('pony','sort','timeformat','bottom');
+	$POSSIBLE_TIME_FORMATS = array('12','24','at');
 	$POSSIBLE_SORT_ORDERS = array('abc','colour','new');
 
 	// Remove CSRF query parameter from request URL
 	function remove_csrf_query_parameter($url, $viajsToo = false){
 		return rtrim(preg_replace('/CSRF_TOKEN=[^&]+(&|$)/','',$url),'?&');
+	}
+
+	$DEFAULT_SETTINGS = array(
+		'pony' => null,
+		'timeformat' => '24',
+		'sort' => 'abc',
+		'bottom' => true,
+	);
+	function get_prefs($nouserid = false){
+		global $signedIn, $currentUser, $Database;
+		if (!$signedIn)
+			return array();
+
+		$UserPrefs = $Database->where('user',$currentUser['local_id'])->getOne('prefs');
+		if (!isset($UserPrefs)){
+			$Database->insert('prefs',array('user' => $currentUser['local_id']));
+			$UserPrefs = $Database->where('user',$currentUser['local_id'])->getOne('prefs');
+		}
+
+		if ($nouserid)
+			unset($UserPrefs['user']);
+
+		return $UserPrefs;
 	}

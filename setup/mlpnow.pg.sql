@@ -90,6 +90,21 @@ CREATE TABLE ponies (
 ALTER TABLE ponies OWNER TO mlpnow;
 
 --
+-- Name: prefs; Type: TABLE; Schema: public; Owner: mlpnow; Tablespace: 
+--
+
+CREATE TABLE prefs (
+    "user" uuid NOT NULL,
+    pony character varying(10),
+    sort character varying(6) DEFAULT 'abc'::character varying NOT NULL,
+    timeformat character varying(2) DEFAULT '24'::character varying NOT NULL,
+    bottom boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE prefs OWNER TO mlpnow;
+
+--
 -- Name: roles; Type: TABLE; Schema: public; Owner: mlpnow; Tablespace: 
 --
 
@@ -188,6 +203,14 @@ ALTER TABLE ONLY ponies
 
 
 --
+-- Name: prefs_user; Type: CONSTRAINT; Schema: public; Owner: mlpnow; Tablespace: 
+--
+
+ALTER TABLE ONLY prefs
+    ADD CONSTRAINT prefs_user PRIMARY KEY ("user");
+
+
+--
 -- Name: roles_name; Type: CONSTRAINT; Schema: public; Owner: mlpnow; Tablespace: 
 --
 
@@ -220,6 +243,13 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: prefs_pony; Type: INDEX; Schema: public; Owner: mlpnow; Tablespace: 
+--
+
+CREATE INDEX prefs_pony ON prefs USING btree (pony);
+
+
+--
 -- Name: sessions_user; Type: INDEX; Schema: public; Owner: mlpnow; Tablespace: 
 --
 
@@ -232,6 +262,22 @@ CREATE INDEX sessions_user ON sessions USING btree ("user");
 
 ALTER TABLE ONLY oauth__deviantart
     ADD CONSTRAINT oauth__deviantart_local_id_fkey FOREIGN KEY (local_id) REFERENCES users(local_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: prefs_pony_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mlpnow
+--
+
+ALTER TABLE ONLY prefs
+    ADD CONSTRAINT prefs_pony_fkey FOREIGN KEY (pony) REFERENCES ponies(shortname) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: prefs_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mlpnow
+--
+
+ALTER TABLE ONLY prefs
+    ADD CONSTRAINT prefs_user_fkey FOREIGN KEY ("user") REFERENCES users(local_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

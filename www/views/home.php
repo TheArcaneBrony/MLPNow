@@ -29,7 +29,7 @@
 <div id="gui">
 	<div class="saveIndicator">
 		<span class="icon"></span>
-		<span class="text">Módosítások mentése</span>
+		<span class="text">Saving settings&hellip;</span>
 	</div>
 
 	<div class="topPart">
@@ -106,9 +106,10 @@ var longtime = <?=365*80+20?>, datestring;
 					day: d.getDate()+'.',
 				};
 			},
+			randomTile: 'Random<br>character',
 		},
 		timer: {},
-		pref: {},
+		pref: <?=JSON::Encode(array_replace($DEFAULT_SETTINGS, get_prefs(true)))?>,
 		signedIn: <?=$signedIn?'true':'false'?>,
 	};
 <?  if ($signedIn){ ?>
@@ -118,7 +119,7 @@ var longtime = <?=365*80+20?>, datestring;
 	MLPNow.recentPonies = <?=json_encode($recentPonies, JSON_UNESCAPED_SLASHES)?>;
 
 	var PonyfontTag = document.createElement('style'),
-		ponyfontStyleString = '',
+		ponyfontStyleString = ".pony-icon.random:before{content:'\\a000'}",
 		slideoutInner = document.getElementById('slideoutInner');
 	for (var i = 0, l = MLPNow.Pony.length; i < l; i++)
 		(function(p){
@@ -166,6 +167,7 @@ var longtime = <?=365*80+20?>, datestring;
 		Pony: MLPNow.Pony,
 		shortnames: MLPNow.shortnames,
 		timer: MLPNow.timer,
+		pref: MLPNow.pref,
 	};
 })();
 </script>

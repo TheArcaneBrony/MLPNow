@@ -14,6 +14,7 @@
 	define('NOW_ISO', date('c', NOW));
 
 	// Imports \\
+	require 'includes/JSON.php';
 	require 'includes/PostgresDb.php';
 	$Database = new PostgresDb('mlpnow');
 	require 'includes/Cookie.php';

@@ -8,8 +8,7 @@ $(function(){
 		consent = 1 === parseInt(localStorage.getItem('cookie_consent'), 10);
 	} catch(e){}
 	$('#login').off('click').on('click',function(){
-		var $this = $(this),
-			opener = function(sure){
+		var opener = function(sure){
 				if (!sure) return;
 
 				try {
@@ -175,41 +174,37 @@ $(function(){
 
 		$slideout.attr('class','sort-'+mode);
 
-		//if (this.handler !== false) updatePref('sort',mode);
+		if (this.handler !== false)
+			updatePref('sort',mode);
 	}
 
 	var tempName;
-	function changeBGImage(whichImage,reload){
+	function changeBGImage(ponyName,noupdate){
 		var random = false;
 
-		if (['boolean','undefined'].indexOf(typeof reload) === -1){
-			random = true;
-			whichImage = reload;
-		}
-
-		if (typeof whichImage === "string" ? MLPNow.shortnames.indexOf(whichImage) === -1 : typeof MLPNow.Pony[whichImage] === 'undefined')
+		if (typeof ponyName === "string" ? MLPNow.shortnames.indexOf(ponyName) === -1 : typeof MLPNow.Pony[ponyName] === 'undefined')
 			return false;
 
-		whichImage = typeof whichImage === "string"
-			? MLPNow.Pony[MLPNow.shortnames.indexOf(whichImage)]
-			: MLPNow.Pony[whichImage];
+		ponyName = typeof ponyName === "string"
+			? MLPNow.Pony[MLPNow.shortnames.indexOf(ponyName)]
+			: MLPNow.Pony[ponyName];
 
-		if (tempName === whichImage.shortname)
+		if (tempName === ponyName.shortname)
 			return;
 
-		//if (scope.handler !== false)
-		//	updatePref.call({callback:scope.callback},'name',(random ? 'random' : whichImage.shortname));
+		if (!noupdate)
+			updatePref('pony', (random ? 'random' : ponyName.shortname));
 
-		$bgContainer.addClass('loading').find('.loading').css('background-image','url("/loader/'+whichImage.color.substring(1)+'")');
+		$bgContainer.addClass('loading').find('.loading').css('background-image','url("/loader/'+ponyName.color.substring(1)+'")');
 		var imgLoaded = 0,
 			$bgEls = $bgContainer.children('.background');
 		$bgEls.fadeOut(500,function(){
 			var $this = $(this),
 				url;
 			if ($this.attr('id') === 'pony')
-				url = '/pony/'+whichImage.shortname;
+				url = '/pony/'+ponyName.shortname;
 			else
-				url = '/splat/'+whichImage.textcolor.substring(1)+'/'+whichImage.bgcolor.substring(1);
+				url = '/splat/'+ponyName.textcolor.substring(1)+'/'+ponyName.bgcolor.substring(1);
 
 			$this.attr('src',url).off('load error').on('load error',function(){
 				if (imgLoaded > 0){
@@ -222,31 +217,40 @@ $(function(){
 			});
 		});
 
-		$('.dyn').removeClass(tempName).addClass(whichImage.shortname);
+		$('.dyn').removeClass(tempName).addClass(ponyName.shortname);
 
-		$slideoutInner.find('.heading').css('color',whichImage.color);
-		$slideoutInner.find('.tile.force-hover:not(".tile-'+(random?'random':whichImage.shortname)+'")').removeClass('force-hover');
-		$slideoutInner.find('.tile:not(".force-hover").tile-'+(random?'random':whichImage.shortname)).addClass('force-hover');
+		$slideoutInner.find('.heading').css('color',ponyName.color);
+		$slideoutInner.find('.tile.force-hover:not(".tile-'+(random?'random':ponyName.shortname)+'")').removeClass('force-hover');
+		$slideoutInner.find('.tile:not(".force-hover").tile-'+(random?'random':ponyName.shortname)).addClass('force-hover');
 
-		tempName = whichImage.shortname;
+		tempName = ponyName.shortname;
 	}
+	changeBGImage(MLPNow.pref.pony, true);
 
-	function AmPm(x){
-		if (['at','12','24'].indexOf(x) !== -1){
-			if (this.handler === false)
-				MLPNow.pref.timeformat = x;
-			//else updatePref('timeformat',x);
+	function AmPm(setTo, noupdate){
+		if (['at','12','24'].indexOf(setTo) !== -1){
+			if (!noupdate)
+				updatePref('timeformat',setTo);
 		}
 	}
+	AmPm(MLPNow.pref.timeformat, true);
 
-	function Bottom(x) {
-		var current = $toggleText.text();
+	function Bottom(visible, noupdate) {
+		var hide = !(typeof visible === 'boolean' ? visible : !MLPNow.pref.bottom);
 
-		var hide = (!isNaN(x) && !x) || current === MLPNow.locale.hide;
 		$toggleText.html(hide ? MLPNow.locale.show : MLPNow.locale.hide);
-		$('.tbh').slideToggle('fast');
-		$toggleIcon.toggleClass('typcn-minus typcn-plus');
+		var $tbh = $('.tbh').stop();
+		if (noupdate)
+			$tbh[hide?'hide':'show']();
+		else $tbh[hide?'slideUp':'slideDown']('fast');
+		$toggleIcon
+			[(hide?'remove':'add')+'Class']('typcn-minus')
+			[(hide?'add':'remove')+'Class']('typcn-plus');
+
+		if (!noupdate)
+			updatePref('bottom', !hide);
 	}
+	Bottom(MLPNow.pref.bottom, true);
 
 	var konami = new Konami(function(){
 		MLPNow.shortnames.push('oc');
@@ -256,7 +260,7 @@ $(function(){
 			color: "#C087D7",
 			shortname: "oc",
 		});
-		changeBGImage.call({handler: false},'oc');
+		changeBGImage('oc', true);
 		clearTimeout(window.prfchk);
 		delete window.prfchk;
 		var style = document.createElement("style");
@@ -276,16 +280,16 @@ $(function(){
 		var lns = chr.longname.split(' ');
 		if (typeof lns[1] === "undefined") lns[1] = '&nbsp;';
 		$this.children('h4').html(lns.join('<br>'));
-		$this.children('.permalink').attr({
+		/*$this.children('.permalink').attr({
 			title: $this.children('.permalink').data('title')+chr.shortname,
 			href: './?name='+chr.shortname,
-		});
+		});*/
 	},function(){
 		var $this = $(this);
 		$this.css('background','linear-gradient(to bottom, #777 0%, #777 100%)');
 		$this.children('h4').html(MLPNow.locale.randomTile);
 		$this.children('span').attr('class','pony-icon random');
-		$this.children('.permalink').removeAttr('title href');
+		//$this.children('.permalink').removeAttr('title href');
 	});
 	
 	var $tiles = $slideoutInner.children('.tile:not([id])');
@@ -313,8 +317,38 @@ $(function(){
 			$('#slideoutTitle .heading').css('color','#777');
 			$tiles.removeClass('force-hover');
 			tempName = undefined;
-			//updatePref('name','');
+			updatePref('name','');
 		}
-		else changeBGImage.call({handler:true},shortname);
+		else changeBGImage(shortname);
 	});
+
+	var $saveInd = $('#gui').children('.saveIndicator');
+	function updatePref(name, value, callback){
+		if (!MLPNow.signedIn)
+			return;
+		$saveInd.stop().show();
+		var origValue = window.MLPNow.pref[name];
+		if (window.MLPNow.pref[name] !== value)
+			window.MLPNow.pref[name] = value;
+		clearInterval(window.prfchk);
+		$.post('/prefupdate', {name:name,value:value}, $.mkAjaxHandler(function(){
+			if (!this.status){
+				window.MLPNow.pref[name] = origValue;
+				return $.Dialog.fail(false, this.message);
+			}
+
+			var classStr = 'typcn typcn-'+(this.status?'tick':'times'),
+				origHTML = $saveInd.children('.text').html();
+			$saveInd.attr('data-status', true).children('.text').addClass(classStr).html(this.message);
+			if (typeof callback === 'function')
+				callback(name,value);
+			setTimeout(function(){
+				$saveInd.fadeOut(500,function(){
+					$saveInd.removeAttr('data-status');
+					$saveInd.children('.text').removeClass(classStr).html(origHTML);
+					window.prfchk = setInterval(window.prfchkF,5000);
+				});
+			},1000);
+		}));
+	}
 });

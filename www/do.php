@@ -37,31 +37,33 @@
 			}
 			do404();
 		break;
-		case "timeformatchange":
-			if (!isset($_POST['ntimeformat']) || !in_array($_POST['ntimeformat'],$POSSIBLE_TIMES_FORMATS)) respond('Érvénytelen vagy hiányzó időformátum!');
-			$_POST['name'] = 'timeformat';
-			$_POST['value'] = $_POST['ntimeformat'];
-			$_MSG = 'Időformátum sikeresen módosítva.';
 		case "prefupdate":
-			if (!$signedIn) respond();
-			if (!isset($_POST['name']) || !isset($_POST['value'])) respond('Hiányzó POST értékek');
+			if (!$signedIn)
+				respond();
+			if (!isset($_POST['name']) || !isset($_POST['value']))
+				respond('Hiányzó POST értékek');
 
-			list($prop,$value) = array($_POST['name'],$_POST['value']);
+			list($pref,$value) = array_map('trim', array($_POST['name'], $_POST['value']));
 
-			$targetUser = $Database->where('usrid',$currentUser['uid'])->getOne('userdata');
+			if (!in_array($pref, $POSSIBLE_PREFS))
+				respond("Attempt to change invalid setting: \"$pref\"");
 
-			if (!isset($targetUser)){
-				$Database->insert('userdata',array('usrid',$currentUser['uid']));
-				$targetUser = $Database->where('usrid',$currentUser['uid'])->getOne('userdata');
+			switch ($pref){
+				case 'timeformat':
+					if (!in_array($value, $POSSIBLE_TIME_FORMATS))
+						respond("Invalid time format setting: \"$value\"");
+				break;
+				case 'sort':
+					if (!in_array($value, $POSSIBLE_SORT_ORDERS))
+						respond("Invalid sort order setting: \"$value\"");
+				break;
 			}
 
-			if (!in_array($prop, $POSSIBLE_PREFS)) respond('Érvénytelen beállítás megváltoztatása: "'.$prop.'"');
+			$UserPrefs = get_prefs();
 
-			$newData = array();
-			$newData[$prop] = $value;
-
-			if (!$Database->where('usrid',$targetUser['usrid'])->update('userdata', $newData)) respond('Nincs változás',1);
-			else respond(isset($_MSG)?$_MSG:'Beállítások mentve',1);
+			if (!$Database->where('user',$UserPrefs['user'])->update('prefs', array($pref => $value)))
+				respond('No changed',1);
+			else respond('Settings saved',1);
 		break;
 		case "pony":
 			if (preg_match('/^[a-z]{1,2}$/',$data)){
@@ -145,7 +147,10 @@
 			else {
 				// Parse color
 				if ($isSimple){
-					if ($data == "default") $color = '777777';
+					if (empty($data))
+						$color = '000000';
+					else if ($data === 'default')
+						$color = '777777';
 					else $color = clrpad($data);
 				}
 				else $color = '000000';

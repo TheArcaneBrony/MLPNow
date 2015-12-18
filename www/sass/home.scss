@@ -227,7 +227,6 @@ body.opened {
 		z-index: 1338;
 		width: 105px;
 		transition-duration: 0.2s;
-		box-shadow:none;
 		height: auto;
 		overflow: hidden;
 		white-space:nowrap;
@@ -251,7 +250,6 @@ body.opened {
 		}
 
 		&:hover, &.force-hover {
-			box-shadow:0 0 15px;
 			filter: contrast(150%);
 		}
 
@@ -323,7 +321,6 @@ body.opened {
 	background-color: #777;
 
 	&:before { display: none }
-	.pony-icon:before { content: '\a000' }
 }
 #gui > div {
 	position: absolute;
@@ -333,7 +330,8 @@ body.opened {
 	position: absolute;
 	right: 7.5px;
 	top: 5px;
-	line-height: 0;
+	line-height: 16px;
+	font-size: 16px;
 	left: inherit !important;
 	display: none;
 	z-index: 8000;
@@ -347,27 +345,24 @@ body.opened {
 			100% { opacity: 1 }
 		}
 	}
-	&[data-status="0"] .text { color: #800 }
-	&[data-status="1"] .text { color: #080 }
-	&[data-status] .icon {
-		display:none;
+	&[data-status] {
+		.icon { display: none }
+		.text {
+			color: #080;
+
+			&:before {
+				margin-right: 5px;
+			}
+		}
 	}
 
 	.icon {
-		display: inline-block;
-		width: 16px !important;
-		height: 16px !important;
-		//noinspection CssUnknownTarget
-		background: url("../loader") no-repeat;
-		background-size: 1200px 16px;
-		animation: play16 3.25s steps(75) infinite;
 		position: relative;
 		top: 2px;
 		right: -3px;
-	}
-	@keyframes play16 {
-		from { background-position:    0; }
-		to { background-position: -1200px; }
+		display: inline-block;
+
+		@include sprite-animation(16px,16px,75,'loader',3.25s);
 	}
 }
 #bgContainer {

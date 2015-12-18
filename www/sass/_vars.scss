@@ -33,14 +33,14 @@ $NOrangeBG: #fed;
 $NYellow: #b80;
 $NYellowBG: #ffd;
 
-@mixin sprite-animation($frameWidth, $height, $frames, $filename){
+@mixin sprite-animation($frameWidth, $height, $frames, $filename, $speed:.6s){
 	$imageWidth: $frames * $frameWidth;
 	width: $frameWidth;
 	height: $height;
+	background: url('../#{$filename}') no-repeat 0 0;
 	background-size: $imageWidth $height;
-	background: url('../img/#{$filename}.png') no-repeat 0 0;
 
-	animation: anim-#{$filename} .6s steps($frames) infinite;
+	animation: anim-#{$filename} $speed steps($frames) infinite;
 	@keyframes anim-#{$filename} {
 		0% { background-position: 0 0 }
 		100% {background-position: 0 -$imageWidth }

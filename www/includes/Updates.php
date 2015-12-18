@@ -11,6 +11,11 @@
 	//////////////////////////*/
 
 	$updates = array(
+		'3.0' => array(
+			'Nagy részben újrairt kódbázis',
+			'oAuth bejelentkezés',
+			'Beállítások mentése a szerveren',
+		),
 		'2.4' => array(
 			'ponies' => array(
 				'Apple Cobbler',
