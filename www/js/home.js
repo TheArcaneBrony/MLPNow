@@ -110,10 +110,39 @@ $(function(){
 	$('#slideoutTitle').find('.order-by').children().on('click',function(){ Sort($(this).attr('id')) });
 	$('#version').on('click',function(){ });
 	// TODO
-	//$('#vectors').on('click',function(){ });
 	//$('#timeformat').on('click',function(){ });
 	$('#charsel').on('click',function(){
 		$body.toggleClass('opened');
+	});
+	var $credits;
+	$('#credits').on('click',function(){
+		if (typeof $credits === 'undefined'){
+			$credits = $.mk('div').append(
+				$.mk('p').append(
+					"Website coded & designed by ",
+					$.mk('a').attr({
+						href: location.href.replace(/mlpnow\./,''),
+						target: '_blank',
+					}).text('DJDavid98')
+				),
+				"<hr>",
+				$.mk('p').html("List of used pony images (names are clickable)")
+			);
+			var $vectorList = $.mk('ul').css({
+				display: 'block',
+				overflowY: 'auto',
+				maxHeight: 400,
+				listStyle: 'none',
+				padding: 0,
+				textAlign: 'center',
+			});
+			$.each(MLPNow.Pony,function(_,el){
+				var url = (el.favme && el.favme[0] === 'd' ? 'http://fav.me/' : '')+el.favme;
+				$vectorList.append('<li style="color:'+el.textcolor+'!important"><a href="'+url+'" target="_blank" style="color:'+el.textcolor+'!important">'+el.longname+'</a>'+(el.oc?' (OC)':'')+' by <a href="http://'+el.vector.toLowerCase()+'.deviantart.com/" target="_blank" style="color:'+el.textcolor+'!important">'+el.vector+'</a></li>');
+			});
+			$credits.append($vectorList);
+		}
+		$.Dialog.info('MLP Now Credits', $credits.clone());
 	});
 
 	// Sign out button handler

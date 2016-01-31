@@ -330,7 +330,7 @@
 		case "home":
 			fix_path('/');
 
-			$Ponies = $Database->get('ponies');
+			$Ponies = $Database->orderBy('longname','ASC')->get('ponies');
 			include "includes/Updates.php";
 
 			loadPage(array(
