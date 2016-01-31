@@ -1,8 +1,9 @@
+<p align="center"><img src="https://raw.githubusercontent.com/DJDavid98/mlpnow/master/graphics/Screenshot.png" alt="Derpi-New Tab" width="400px"></p>
 <h1 align="center">MLP Now</h1>
 
-## What's this site?
+## What's this?
 
-A simple web page that displays the date and time accoring to the user's preferences.
+A simple web page that displays the date and time accoring to the user's preferences, accompanied by a character selector which will change the site's background to a pony of the user's choosing.
 
 ### Sounds pretty basic, why all the fuss?
 
