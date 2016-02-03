@@ -13,7 +13,8 @@
 	$updates = array(
 		'3.0' => array(
 			'ponies' => array(
-				'Paamayim Nekudotayim'
+				'Paamayim Nekudotayim',
+				'Snow Pup'
 			),
 			'Nagy részben újrairt kódbázis',
 			'oAuth bejelentkezés',
