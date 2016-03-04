@@ -16,13 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "DJDavid98/MLPNow"
+    "url": "SeinopSys/MLPNow"
   },
   "bugs": {
-    "url": "https://github.com/DJDavid98/MLPNow/issues",
-    "email": "djdavid98@gmail.com"
+    "url": "https://github.com/SeinopSys/MLPNow/issues",
+    "email": "seinopsys@gmail.com"
   },
-  "author": "DJDavid98 <djdavid98@gmail.com> (http://djdavid98.hu/)",
+  "author": "SeinopSys <seinopsys@gmail.com> (https://github.com/SeinopSys)",
   "license": "MIT",
   "private": true
 }

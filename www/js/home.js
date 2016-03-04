@@ -118,15 +118,9 @@ $(function(){
 	$('#credits').on('click',function(){
 		if (typeof $credits === 'undefined'){
 			$credits = $.mk('div').append(
-				$.mk('p').append(
-					"Website coded & designed by ",
-					$.mk('a').attr({
-						href: location.href.replace(/mlpnow\./,''),
-						target: '_blank',
-					}).text('DJDavid98')
-				),
+				"<p>Website coded & designed by <a href='https://github.com/SeinopSys'>SeinopSys</a></p>",
 				"<hr>",
-				$.mk('p').html("List of used pony images (names are clickable)")
+				"<p>List of used pony images (names are clickable)</p>"
 			);
 			var $vectorList = $.mk('ul').css({
 				display: 'block',

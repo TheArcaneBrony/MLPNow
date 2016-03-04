@@ -21,7 +21,7 @@
 							<br>
 							
 							<h2>OC, azaz <i>saját</i> póni kérése:</h2>
-							<p>Írj egy e-mail-t az <a href="mailto:djdavid98+mlpnow@gmail.com?subject=MLP Now Karakterkérés" target="_blank">djdavid98@gmail.com</a> címre, melyben megadod az OC-d <b>teljes nevét</b>, és melyhez link vagy csatolmány formájában elküldöd a képet az OC-d ról.</p>
+							<p>Írj egy e-mail-t az <a href="mailto:seinopsys+mlpnow@gmail.com?subject=MLP Now Karakterkérés" target="_blank">seinopsys@gmail.com</a> címre, melyben megadod az OC-d <b>teljes nevét</b>, és melyhez link vagy csatolmány formájában elküldöd a képet az OC-d ról.</p>
 							<p>Fontos, hogy a kép mérete nem lehet kisebb, mint 350 képpont sem szélességben, sem magasságban és csak AI, PNG vagy PSD fájl lehet, átlátszó háttérrel.</p>
 							<p>Emellet még meg kell adnod egy (bece)nevet ami a vektor mellé a GYIK-be kikerül, és egy linket ami egy hozzád tartozó weboldalra mutat.</p>
 							<p class="red">Azok az OC-k, amelyek nem a sorozathoz hűen vannak rajzolva, nem kerülnek be.<br>Kérj meg valakit, hogy vektorozza le neked az OC-d ha papírra vagy más stílusban rajzoltad.</p>
@@ -44,7 +44,7 @@
 					<div class="right">
 						<h1 class="que" id=5>Ki áll az oldal mögött?</h1>
 						<div class="ans">
-							<p>Az oldalt <a href="http://djdavid98.eu/" target="_blank">DJDavid98</a>, azaz én kódoltam, a háttér festék effektjét pedig <a href="http://aman692.deviantart.com/" target="_blank">aman692</a>-nek köszönhetem. <a href="http://bit.ly/SupportAman692" target="_blank" class="dyn">Támogasd Őt!</a></p>
+							<p>Az oldalt <a href="https://github.com/SeinopSys" target="_blank">SeinopSys</a>, azaz én kódoltam, a háttér festék effektjét pedig <a href="http://aman692.deviantart.com/" target="_blank">aman692</a>-nek köszönhetem. <a href="http://bit.ly/SupportAman692" target="_blank" class="dyn">Támogasd Őt!</a></p>
 
 							<div class="fb-like" data-href="https://www.facebook.com/MLPNow" data-width="450" data-show-faces="true" data-send="false"></div>
 						</div>

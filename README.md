@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/DJDavid98/mlpnow/master/graphics/Screenshot.png" alt="Derpi-New Tab" width="400px"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/SeinopSys/mlpnow/master/graphics/Screenshot.png" alt="Derpi-New Tab" width="400px"></p>
 <h1 align="center">MLP Now</h1>
 
 ## What's this?
